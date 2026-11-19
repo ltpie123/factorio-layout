@@ -59,7 +59,7 @@ const row = (top, frames, colour, opacity, bold = false) =>
 
 /** The chevrons, then each lane of plates; at night they fade toward the dark. */
 const belt = (dark) => [
-  row(BELT_Y + 6, CHEVRONS, "#b5892a", 0.75 - dark * 0.45, true),
+  row(BELT_Y + 6, CHEVRONS, "#d9a332", 0.95 - dark * 0.5, true),
   ...LANES.map((l) => row(l.top, l.frames, l.colour, 1 - dark * 0.55)),
 ];
 
