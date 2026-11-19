@@ -43,4 +43,4 @@ rebuild from scratch.
 
 `config.toml` is a matching colour theme for the herdr terminal UI (`~/.config/herdr/config.toml`).
 
-Titillium Web is under the SIL Open Font License (`mods/factory/fonts/OFL.txt`).
+Code and art under the MIT License (`LICENSE`); Titillium Web under the SIL Open Font License (`mods/factory/fonts/OFL.txt`).
