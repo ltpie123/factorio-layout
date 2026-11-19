@@ -2,7 +2,7 @@
 // program (claude orange, codex teal, gemini blue, opencode green, pi purple, shells grey,
 // other agents yellow) and whose serial number comes from a hash of its address.
 
-import { focused, panes, spaces, terminals, shared, setShared } from "herdr";
+import { focused, panes, spaces, terminals, shared, setShared, settings, appHome, readTextFile, writeTextFile } from "herdr";
 import PLAN from "./floormap.js";
 
 export const ART = PLAN.art; // a new folder per bake (tools/bake_art.py)
@@ -82,4 +82,21 @@ export function darkness(d = new Date()) {
   if (h >= 18) return (h - 18) / 2;
   if (h < 7) return 1 - (h - 5.5) / 1.5;
   return 0;
+}
+
+/**
+ * Day is light mode: the layout's theme is {light: Factory-Light, dark: Factory}, so the app's
+ * appearance (settings.json `appearance`, app-wide) follows the sky. Writes only on a change.
+ */
+export async function syncLook() {
+  const dark = darkness() >= 0.5;
+  if (settings()?.dark === dark) return;
+  const path = `${appHome()}/settings.json`;
+  try {
+    const old = await readTextFile(path);
+    const next = { ...(old ? JSON.parse(old) : {}), appearance: dark ? "dark" : "light" };
+    await writeTextFile(path, `${JSON.stringify(next, null, 2)}\n`, old);
+  } catch (e) {
+    console.error(`factory: couldn't set the appearance: ${e}`); // the next tick tries again
+  }
 }

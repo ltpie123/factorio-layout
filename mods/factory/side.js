@@ -38,11 +38,11 @@ export default class Side {
 
   /** An inventory slot: dark, sunken, an item with its count in the bottom-right corner. */
   slot(icon, count, tip) {
-    return div().id(`slot-${tip}`).relative().size(40).flex_none().rounded(3).bg("#1f1e1f")
-      .border_1().border_color("#4a494a").tooltip(tip)
-      .child(div().absolute().left(0).top(0).right(0).h(3).bg("#141314"))
+    return div().id(`slot-${tip}`).relative().size(40).flex_none().rounded(3).bg(P.slot)
+      .border_1().border_color(P.slotEdge).tooltip(tip)
+      .child(div().absolute().left(0).top(0).right(0).h(3).bg(P.slotLo))
       .child(pic(icon, 32, 32).absolute().left(4).top(4))
-      .child(txt(count, 13, "#ffffff", 700).absolute().right(3).bottom(0));
+      .child(txt(count, 13, P.count, 700).absolute().right(3).bottom(0));
   }
 
   card(u) {
@@ -60,7 +60,7 @@ export default class Side {
         .child(pic("checker", 320, 160).absolute().left(0).top(0))
         .child(div().absolute().left(0).right(0).top(0).bottom(0).flex().items_center().justify_center()
           .child(pic(`bot-${u.bot.colour}-big`, 104, 104).loop("top", { from: -2, to: -8, period: 1400 }))))
-      .child(div().h(14).relative().rounded(2).bg("#1b1a1b").border_1().border_color("#4a494a").overflow_hidden()
+      .child(div().h(14).relative().rounded(2).bg(P.slotLo).border_1().border_color(P.slotEdge).overflow_hidden()
         .when(u.status === "working", (el) => el.child(progress(30).absolute().left(3).top(-2))))
       .child(h_flex().gap(6).items_center()
         .child(this.slot("item-slot", u.bot.crafted, "Turns taken"))

@@ -38,6 +38,12 @@ floor goes dark blue and the lamps light warm pools.
   y 160–192, wooden power poles with copper wire and six street lamps below it.
 - **Robot colours** by program: Claude orange, Codex teal, Gemini blue, OpenCode green,
   pi/omp purple, other agents yellow, plain shells grey (white body, coloured band).
+- **Day is light mode.** The layout's theme is `{ "light": "Factory-Light", "dark": "Factory" }`
+  and the mod sets the app-wide `appearance` in `settings.json` from the sky (only on a change),
+  so terminals and chrome follow day and night. The panels swap palettes on the same clock:
+  day is sandy (`#e6d6b2` frames, `#d9c6a0` insets, `#2e2516` ink, `#d9730d` accent), night
+  is the dark game GUI. `themes/Factory-Light.json`: terminal `#f7eedb`, chrome `#e0cea7`,
+  border `#b09a6e`.
 - **Theme** `themes/Factory.json`: terminal `#1e1d1e`, text `#e8e2d6`, accent `#ff9f1c`,
   working `#5eb663`, blocked `#fe5a5a`, done `#ffcc33`, idle `#8e8e8e`.
   Fonts: JetBrains Mono for terminals, Titillium Web (bundled, OFL) for the UI.
@@ -87,6 +93,8 @@ floor goes dark blue and the lamps light warm pools.
 
 ## Watch out
 
+- Herdr reads `themes/*.json` when the layout loads: after editing a theme, switch layouts away
+  and back (`ctrl-shift-l`) to see it.
 - Herdr caches images by path: a rebake into the same folder keeps showing the old art, hence
   the stamped folder. A freshly swapped image can be blank for a few seconds.
 - `frames` needs an initial `.child(text)` or nothing draws; `line_height` on the belt rows

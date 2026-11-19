@@ -8,6 +8,7 @@ import Bar from "./bar.js";
 import Side from "./side.js";
 import Floor from "./floor.js";
 import PaneHead from "./pane.js";
+import { usePalette } from "./ui.js";
 
 const ROLES = { bar: Bar, side: Side, floor: Floor, pane: PaneHead };
 
@@ -21,6 +22,7 @@ export default class Factory extends View {
   }
 
   render(cx) {
+    usePalette();
     if (this.single) return this.parts[0].render(cx);
     return div().flex().flex_col().size_full().children(this.parts.map((r) => div().h(260).child(r.render(cx))));
   }

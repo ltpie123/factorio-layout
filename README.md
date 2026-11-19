@@ -7,7 +7,7 @@ or patrol. The belt runs, the furnaces burn, and at night the lamps light up the
 
 ![Factory Floor](preview.png)
 
-At night the lamps, furnaces and roboport light up the floor:
+Day is light mode; at night the whole app goes dark and the lamps, furnaces and roboport light up the floor:
 
 ![Factory Floor at night](preview-night.png)
 

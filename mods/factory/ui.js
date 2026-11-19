@@ -4,18 +4,34 @@
 
 import { div, image, svg } from "gpui-kit";
 import { h_flex } from "gpui-base";
-import { ART } from "./kit.js";
+import { ART, darkness } from "./kit.js";
 
 export const FONT = "Titillium Web";
 
-export const P = {
+// Night is the dark game GUI; day is its light-mode twin (warm paper and steel).
+const DARK = {
   frame: "#313031", frameHi: "#4a494a", frameLo: "#1b1a1b",
   inset: "#242324", insetLo: "#141314", row: "#2c2b2c", rowHover: "#3a393a",
   heading: "#ffe6c0", text: "#e8e2d6", soft: "#a9a39a",
   accent: "#ff9f1c", accentDark: "#b86a0c", pick: "#4a3a1f",
   button: "#8e8e8e", buttonHi: "#b4b4b4", buttonLo: "#5c5b5c", buttonInk: "#161616",
+  slot: "#1f1e1f", slotEdge: "#4a494a", slotLo: "#141314", count: "#ffffff", danger: "#c8473f",
   working: "#5eb663", blocked: "#fe5a5a", done: "#ffcc33", idle: "#8e8e8e",
 };
+const LIGHT = { // sandy, to sit next to the floor's desert dirt
+  frame: "#e6d6b2", frameHi: "#fbf2db", frameLo: "#9c8660",
+  inset: "#d9c6a0", insetLo: "#bba47a", row: "#eee0c1", rowHover: "#f7eed6",
+  heading: "#45300f", text: "#2e2516", soft: "#6f5f44",
+  accent: "#d9730d", accentDark: "#a85606", pick: "#f4d08a",
+  button: "#d8c9a6", buttonHi: "#eee3c6", buttonLo: "#a99774", buttonInk: "#161616",
+  slot: "#d2bf98", slotEdge: "#a48f66", slotLo: "#b8a277", count: "#2e2516", danger: "#d8503f",
+  working: "#3d8a3f", blocked: "#c23a2e", done: "#a87800", idle: "#8a7d66",
+};
+
+export const P = { ...DARK };
+
+/** Loads the sky's palette into P; every render starts here. */
+export const usePalette = () => Object.assign(P, darkness() >= 0.5 ? DARK : LIGHT);
 
 export const pic = (name, w, h) => image(`${ART}/${name}.png`).w(w).h(h).flex_none();
 export const glyph = (name, size, color) => svg(`${ART}/${name}.svg`).size(size).flex_none().text_color(color);
@@ -45,7 +61,7 @@ export const filler = (h = 12) => div().flex_1().min_w(16).h(h).overflow_hidden(
 
 /** A light grey game button with dark text; orange on hover, darker when pressed. */
 export function button(id, content, onClick, tip, { h = 26, tone = "plain" } = {}) {
-  const face = tone === "confirm" ? P.working : tone === "danger" ? "#c8473f" : P.button;
+  const face = tone === "confirm" ? P.working : tone === "danger" ? P.danger : P.button;
   return h_flex().id(id).flex_none().h(h).px(10).gap(5).items_center().justify_center().cursor_pointer()
     .bg(face).border_1().border_color(P.frameLo).rounded(2)
     .border_t_1()
@@ -61,7 +77,7 @@ export function button(id, content, onClick, tip, { h = 26, tone = "plain" } = {
 export function tool(id, name, onClick, tip, danger = false) {
   return div().id(id).flex_none().size(22).flex().items_center().justify_center().cursor_pointer()
     .bg(P.row).border_1().border_color(P.frameLo).rounded(2)
-    .hover((s) => s.bg(danger ? "#c8473f" : P.accent))
+    .hover((s) => s.bg(danger ? P.danger : P.accent))
     .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
     .tooltip(tip)
     .child(glyph(name, 14, P.text))

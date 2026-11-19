@@ -9,6 +9,6 @@ DEST=${HERDR_APP_HOME:-"$HOME/.config/herdr-app"}
 mkdir -p "$DEST/mods" "$DEST/layouts" "$DEST/themes"
 rsync -a --delete "$REPO/mods/factory/" "$DEST/mods/factory/"
 rsync -a "$REPO/layouts/Factory.json" "$REPO/layouts/Factory.png" "$DEST/layouts/"
-rsync -a "$REPO/themes/Factory.json" "$DEST/themes/"
+rsync -a "$REPO/themes/Factory.json" "$REPO/themes/Factory-Light.json" "$DEST/themes/"
 herdr-app check "$DEST/mods/factory"
 echo "Installed. Switch to it: herdr-app do layout.switch '{\"name\":\"Factory\"}'"

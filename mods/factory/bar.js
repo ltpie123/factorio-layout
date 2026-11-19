@@ -5,13 +5,14 @@
 import { div } from "gpui-kit";
 import { h_flex } from "gpui-base";
 import { spaces, run, nextCommand, window as appWindow } from "herdr";
-import { crew, focusArgs, hhmm, sky, nextSky, darkness } from "./kit.js";
+import { crew, focusArgs, hhmm, sky, nextSky, darkness, syncLook } from "./kit.js";
 import { P, txt, heading, glyph, pic, filler, frame, tool, button } from "./ui.js";
 
 export default class Bar {
   init(_p, cx) {
     this.now = new Date();
-    cx.timer.every(30_000, (cx) => { this.now = new Date(); cx.notify(); });
+    cx.timer.every(30_000, (cx) => { this.now = new Date(); cx.spawn(syncLook); cx.notify(); });
+    cx.spawn(syncLook);
     // keys.json: "ctrl-shift-g": "factory.sky"
     // touching cx each turn ends this loop when a reload replaces the build; without it the old
     // loop kept spinning on empty commands at 100% CPU
@@ -19,7 +20,7 @@ export default class Bar {
       for (;;) {
         const c = await nextCommand();
         if (!c) return;
-        if (c === "sky") nextSky();
+        if (c === "sky") { nextSky(); await syncLook(); }
         cx.notify();
       }
     });
@@ -61,7 +62,7 @@ export default class Bar {
       .child(filler(12))
       .child(txt(where, 15, P.heading, 600).flex_none().max_w(420).truncate())
       .child(button("sky", txt(`${darkness() >= 0.5 ? "☾" : "☀"} ${sky() === "auto" ? "Auto" : sky() === "night" ? "Night" : "Day"}`, 14, P.buttonInk, 700),
-        nextSky, "Sky: follow the clock, always night, or always day (ctrl-shift-g)", { h: 24 }))
+        (_e, cx) => { nextSky(); cx.spawn(syncLook); }, "Sky: follow the clock, always night, or always day (ctrl-shift-g)", { h: 24 }))
       .child(heading(hhmm(this.now), 18, P.text))
       .when(Boolean(win?.buttons), (el) => el.child(h_flex().flex_none().gap(4).pl(6)
         .child(tool("w-min", "min", () => run("window.minimize"), "Minimize"))
