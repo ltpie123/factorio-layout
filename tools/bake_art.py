@@ -255,8 +255,8 @@ def assembler() -> Image.Image:
 
 
 def belt() -> Image.Image:
-    """A straight belt, 32 px: steel side frames with rivets, ribbed rubber treads, dim brass
-    chevrons stamped into the rubber, and the shadow it casts along its south edge."""
+    """A straight belt, 32 px: steel side frames with rivets, ribbed rubber treads, and the
+    shadow it casts along its south edge. Its chevrons move, so the mod draws them."""
     c = Canvas(MAP_W, 38)
     c.rect(0, 30, MAP_W, 38, fill=(20, 12, 4, 90))  # cast shadow
     c.rect(0, 31, MAP_W, 34, fill=(20, 12, 4, 70))
@@ -267,10 +267,6 @@ def belt() -> Image.Image:
         c.rect(x + 2.4, 4, x + 3, 28, fill=hexa("#2b2b29"))
     for y in (4, 27):  # tread edges catch the light
         c.rect(0, y, MAP_W, y + 1, fill=(0, 0, 0, 90))
-    for x in range(6, MAP_W, 32):  # chevrons: worn brass, set into the rubber
-        pts = [(x, 9), (x + 4, 9), (x + 10, 16), (x + 4, 23), (x, 23), (x + 6, 16)]
-        c.poly([(px + 0.6, py + 0.6) for px, py in pts], fill=(0, 0, 0, 120))
-        c.poly(pts, fill=(176, 134, 40, 150))
     for y0 in (0, 28):  # side frames
         c.rect(0, y0, MAP_W, y0 + 4, fill=hexa("#55554f"))
         c.rect(0, y0, MAP_W, y0 + 1, fill=hexa("#8f8f86"))

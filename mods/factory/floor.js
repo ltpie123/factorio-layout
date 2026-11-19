@@ -47,6 +47,15 @@ const LANES = [ // copper plates on the far lane, iron on the near one
   { top: BELT_Y + 1, colour: "#d9803f", frames: lane("■   ■    ■  ") },
   { top: BELT_Y + 11, colour: "#b3c0c6", frames: lane("■  ■   ■     ") },
 ];
+// Chevrons ride the belt with the plates: JetBrains Mono advances 0.6 em, so ">" at 20 px is
+// 12 px wide, one step per 100 ms = 120 px/s, the plates' speed (8.4 px per 70 ms).
+const CHEVRONS = lane(">  ");
+const chevrons = (dark) => [[1, "#00000080"], [0, "#b5892a"]].map(([o, colour]) =>
+  div().absolute().left(o).top(BELT_Y - 3 + o).w(MAP_W).h(32).overflow_hidden()
+    .font_family("JetBrains Mono").font_weight(800).text_size(20).text_color(colour).whitespace_nowrap()
+    .opacity(o ? 0.8 : 0.75 - dark * 0.45)
+    .frames(CHEVRONS, 100).child(CHEVRONS[0]));
+
 /** Each lane twice, its shadow one pixel down-right; every view shares one frame clock, so
  *  the two stay in step. At night the plates fade toward the dark. */
 const belt = (dark) => LANES.flatMap((l) => [[1, "#00000099"], [0, l.colour]].map(([o, colour]) =>
@@ -285,6 +294,7 @@ export default class Floor {
       .child(div().absolute().left(left).top(top).w(MAP_W).h(MAP_H)
         .child(pic("floor", MAP_W, MAP_H).absolute().left(0).top(0))
         .children(this.nightfall())
+        .children(chevrons(this.dark))
         .children(belt(this.dark))
         .children(this.fires())
         .children(fixed)
