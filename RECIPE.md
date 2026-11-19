@@ -53,9 +53,10 @@ floor goes dark blue and the lamps light warm pools.
 
 - Robots bob (loop on `top`) with their shadow on the ground 14 px right and 24 px down.
   Free spots keep 48 px apart and avoid the working, blocked and done robots.
-- The belt carries copper plates on the far lane and iron on the near one: `■` text rows
-  shifted one character per frame (`frames`, 70 ms), each lane drawn twice (a dark shadow
-  1 px down-right) in step. Furnaces always flicker (two glows out of step).
+- The belt carries copper plates on the far lane and iron on the near one, over brass `>`
+  chevrons: three text rows (JetBrains Mono 14, 8.4 px a character) shifted one character per
+  frame on one shared 100 ms `frames` clock, so plates and chevrons move together at 84 px/s.
+  Furnaces always pulse (one glow each).
 - Night: `darkness()` is 1 from 20:00 to 05:30, ramps over dusk (18–20) and dawn
   (05:30–07:00). `floor-night.png` fades in over the floor with that opacity, lamp lenses glow,
   robots switch to moonlit sprites, gears dim, plates fade. The sky button or
@@ -95,6 +96,10 @@ floor goes dark blue and the lamps light warm pools.
 - Agents started inside fish (like `tools/demo.sh`'s stand-ins) show as the shell program, so
   a shell that reports a status is treated as an unnamed agent (yellow).
 - `keys.json` values must be strings (`"layout.toggle:floor"`), not objects.
+- A `nextCommand()` loop must touch its own `cx` and stop on an empty command: one that only
+  awaits `nextCommand()` outlives a hot reload and spins at 100% CPU until the app restarts.
+- Every `frames` clock and `loop` redraws the whole window: keep animations on one beat
+  (one `frames` period) and drop ones nobody notices.
 - 8 working, 5 blocked and 5 done spots; more show a "+n" chip.
 
 ## Done when

@@ -47,22 +47,21 @@ const LANES = [ // copper plates on the far lane, iron on the near one
   { top: BELT_Y + 1, colour: "#d9803f", frames: lane("■   ■    ■  ") },
   { top: BELT_Y + 11, colour: "#b3c0c6", frames: lane("■  ■   ■     ") },
 ];
-// Chevrons ride the belt with the plates: JetBrains Mono advances 0.6 em, so ">" at 20 px is
-// 12 px wide, one step per 100 ms = 120 px/s, the plates' speed (8.4 px per 70 ms).
-const CHEVRONS = lane(">  ");
-const chevrons = (dark) => [[1, "#00000080"], [0, "#b5892a"]].map(([o, colour]) =>
-  div().absolute().left(o).top(BELT_Y - 3 + o).w(MAP_W).h(32).overflow_hidden()
-    .font_family("JetBrains Mono").font_weight(800).text_size(20).text_color(colour).whitespace_nowrap()
-    .opacity(o ? 0.8 : 0.75 - dark * 0.45)
-    .frames(CHEVRONS, 100).child(CHEVRONS[0]));
+// Plates and chevrons share one 100 ms frame clock and one 14 px font (0.6 em = 8.4 px a step,
+// 84 px/s), so they move together and the window redraws on one beat, not two.
+const STEP = 100;
+const CHEVRONS = lane(">   ");
+const row = (top, frames, colour, opacity, bold = false) =>
+  div().absolute().left(0).top(top).w(MAP_W).h(18).overflow_hidden()
+    .font_family("JetBrains Mono").font_weight(bold ? 800 : 400).text_size(14).text_color(colour)
+    .whitespace_nowrap().opacity(opacity)
+    .frames(frames, STEP).child(frames[0]);
 
-/** Each lane twice, its shadow one pixel down-right; every view shares one frame clock, so
- *  the two stay in step. At night the plates fade toward the dark. */
-const belt = (dark) => LANES.flatMap((l) => [[1, "#00000099"], [0, l.colour]].map(([o, colour]) =>
-  div().absolute().left(o).top(l.top + o).w(MAP_W).h(18).overflow_hidden()
-    .font_family("JetBrains Mono").text_size(14).text_color(colour).whitespace_nowrap()
-    .opacity(o ? 1 : 1 - dark * 0.55)
-    .frames(l.frames, 70).child(l.frames[0])));
+/** The chevrons, then each lane of plates; at night they fade toward the dark. */
+const belt = (dark) => [
+  row(BELT_Y + 6, CHEVRONS, "#b5892a", 0.75 - dark * 0.45, true),
+  ...LANES.map((l) => row(l.top, l.frames, l.colour, 1 - dark * 0.55)),
+];
 
 /** Two images swapped fast by opposite clamped opacity loops: a flicker. */
 const flicker = (a, b, w, h, period) => [
@@ -162,8 +161,7 @@ export default class Floor {
       .transition("left", policy).transition("top", policy)
       .tooltip(tip)
       .on_click(() => this.focus(u))
-      .child(div().absolute().left(BOT / 2 - 11 + SHADOW[0]).top(BOT - 5 + SHADOW[1]).w(22).h(9).rounded_full().bg("#1e0e0466")
-        .loop("left", { from: BOT / 2 - 12 + SHADOW[0], to: BOT / 2 - 9 + SHADOW[0], period: bob }))
+      .child(div().absolute().left(BOT / 2 - 11 + SHADOW[0]).top(BOT - 5 + SHADOW[1]).w(22).h(9).rounded_full().bg("#1e0e0466"))
       .child(pic(`bot-${u.bot.colour}${face ? `-${face}` : ""}${this.dark >= 0.5 ? "-night" : ""}`, BOT, BOT).absolute().left(0)
         .loop("top", { from: 0, to: -4, period: bob }))
       .children(extras)
@@ -214,12 +212,10 @@ export default class Floor {
     ];
   }
 
-  /** Furnaces always burn: two glows out of step make the fire flicker. */
+  /** Furnaces always burn: a pulsing glow at each mouth. */
   fires() {
-    return PLAN.furnaces.flatMap(([x, y]) => [
-      pic("glow-fire", 64, 64).absolute().left(x).top(y + 18).loop("opacity", { from: 0.45, to: 0.9, period: 620 }),
-      pic("glow-fire", 40, 40).absolute().left(x + 12).top(y + 32).loop("opacity", { from: 0.9, to: 0.3, period: 410 }),
-    ]);
+    return PLAN.furnaces.map(([x, y]) =>
+      pic("glow-fire", 64, 64).absolute().left(x).top(y + 18).loop("opacity", { from: 0.45, to: 0.9, period: 620 }));
   }
 
   more(n, [x, y]) {
@@ -292,9 +288,8 @@ export default class Floor {
       .on_mouse_up("left", () => { this.drag = null; })
       .on_hover((h) => { if (!h) this.drag = null; })
       .child(div().absolute().left(left).top(top).w(MAP_W).h(MAP_H)
-        .child(pic("floor", MAP_W, MAP_H).absolute().left(0).top(0))
+        .when(this.dark < 1, (el) => el.child(pic("floor", MAP_W, MAP_H).absolute().left(0).top(0)))
         .children(this.nightfall())
-        .children(chevrons(this.dark))
         .children(belt(this.dark))
         .children(this.fires())
         .children(fixed)

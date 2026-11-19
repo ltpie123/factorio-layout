@@ -13,8 +13,15 @@ export default class Bar {
     this.now = new Date();
     cx.timer.every(30_000, (cx) => { this.now = new Date(); cx.notify(); });
     // keys.json: "ctrl-shift-g": "factory.sky"
-    cx.spawn(async () => {
-      for (;;) if ((await nextCommand()) === "sky") nextSky();
+    // touching cx each turn ends this loop when a reload replaces the build; without it the old
+    // loop kept spinning on empty commands at 100% CPU
+    cx.spawn(async (cx) => {
+      for (;;) {
+        const c = await nextCommand();
+        if (!c) return;
+        if (c === "sky") nextSky();
+        cx.notify();
+      }
     });
   }
 
