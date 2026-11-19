@@ -1,0 +1,41 @@
+# herdr config — Factorio look.
+# Install: cp config.toml ~/.config/herdr/config.toml && herdr server reload-config
+onboarding = false
+
+[theme]
+# Warm dark base; Factorio tokens below override most of it.
+name = "gruvbox"
+auto_switch = false
+
+[theme.custom]
+# Factorio GUI: charcoal frames, darker inset panels, orange highlights, cream text.
+panel_bg      = "#242324"  # inset slot / deep panel
+sidebar_bg    = "#313031"  # outer window frame
+surface0      = "#403f40"  # raised panel
+surface1      = "#4f4e4f"  # button face
+surface_dim   = "#1b1a1b"  # shadow
+overlay0      = "#5c5b5c"  # frame edge
+overlay1      = "#8e8e8e"  # disabled text
+active_row_bg = "#4a3a1f"  # selected slot glow (dim orange)
+selection_bg  = "#5a4523"  # hover slot
+accent        = "#ff9f1c"  # Factorio orange
+text          = "#ffe6c0"  # cream heading text
+subtext0      = "#c8b89a"  # body text
+green         = "#5eb663"  # confirm button / working
+yellow        = "#ffcc33"  # transport belt
+red           = "#fe5a5a"  # alert / cancel button
+peach         = "#e39827"  # deep orange
+blue          = "#6ea6c9"  # research / science
+teal          = "#4fb6a8"  # fluid pipes
+mauve         = "#b06cc8"  # utility science
+
+[ui]
+status_indicators = "symbols"
+accent = "#ff9f1c"
+# Factorio windows float apart with framed edges.
+pane_borders = "always"
+pane_outer_borders = true
+pane_gaps = true
+
+[ui.toast]
+delivery = "terminal"

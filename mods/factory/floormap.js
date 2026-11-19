@@ -1,0 +1,2 @@
+// Written by tools/bake_art.py: where everything stands on floor.png (display px).
+export default {"assemblers": [256, 384, 512, 640, 1824, 1952, 2080, 2208], "assembler_y": 14, "belt_y": 160, "roboport": [1216, 12], "lamp": [944, 112], "chests": [1488, 1552, 1616, 1680], "chest_y": 104, "furnaces": [[40, 40], [40, 176], [2456, 40], [2456, 176]], "poles": [184, 600, 1020, 1430, 1860, 2300], "lamps": [[288, 200], [736, 200], [1168, 200], [1592, 200], [2016, 200], [2448, 200]], "art": "mods/factory/art/6aff7824"};

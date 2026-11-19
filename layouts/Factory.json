@@ -1,0 +1,80 @@
+{
+  "id": "root",
+  "type": "column",
+  "titlebar": "none",
+  "traffic_lights": [16, 20],
+  "theme": "Factory",
+  "font": "JetBrains Mono",
+  "ui_font": "Titillium Web",
+  "terminal_padding": [10, 8],
+  "terminal_opacity": 1,
+  "preview": "layouts/Factory.png",
+  "background": "chrome",
+  "resizable": false,
+  "children": [
+    {
+      "id": "bar",
+      "type": "block",
+      "size": { "px": 40 },
+      "window_drag": true,
+      "content": { "mod": "factory", "props": { "role": "bar" } }
+    },
+    {
+      "id": "body",
+      "type": "row",
+      "padding": [6, 6],
+      "gap": 6,
+      "children": [
+        {
+          "id": "left",
+          "type": "block",
+          "size": { "px": 290 },
+          "min": 220,
+          "max": 420,
+          "content": { "mod": "factory", "props": { "role": "side" } }
+        },
+        {
+          "id": "right",
+          "type": "column",
+          "gap": 6,
+          "children": [
+            {
+              "id": "main",
+              "type": "block",
+              "padding": 4,
+              "background": "border",
+              "radius": 2,
+              "content": {
+                "tab": "active",
+                "pane": {
+                  "header": {
+                    "content": { "mod": "factory", "props": { "role": "pane" } },
+                    "height": 30,
+                    "position": "top",
+                    "reveal": "always"
+                  },
+                  "background": "background",
+                  "border": { "width": 2, "color": "#1b1a1b" },
+                  "focus": { "width": 2, "color": "accent" },
+                  "radius": 2,
+                  "gap": 6,
+                  "lone": true
+                }
+              }
+            },
+            {
+              "id": "floor",
+              "type": "block",
+              "size": { "px": 260 },
+              "min": 140,
+              "max": 260,
+              "radius": 2,
+              "border": { "width": 2, "color": "#1b1a1b" },
+              "content": { "mod": "factory", "props": { "role": "floor" } }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

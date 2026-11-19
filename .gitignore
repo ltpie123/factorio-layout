@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+mods/factory/*.d.ts
+mods/factory/jsconfig.json

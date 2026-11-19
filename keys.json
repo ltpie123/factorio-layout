@@ -1,0 +1,7 @@
+{
+  "layout:Factory": {
+    "ctrl-shift-j": "layout.toggle:floor",
+    "ctrl-shift-b": "layout.toggle:left",
+    "ctrl-shift-g": "factory.sky"
+  }
+}
