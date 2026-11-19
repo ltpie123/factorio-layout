@@ -7,6 +7,10 @@ or patrol. The belt runs, the furnaces burn, and at night the lamps light up the
 
 ![Factory Floor](preview.png)
 
+At night the lamps, furnaces and roboport light up the floor:
+
+![Factory Floor at night](preview-night.png)
+
 All art is original, drawn by `tools/bake_art.py`; no game files are used or downloaded.
 Inspired by Factorio; not affiliated with Wube Software.
 
